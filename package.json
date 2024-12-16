@@ -1,0 +1,17 @@
+{
+  "name": "elastic-poc",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.16.2",
+    "moment": "^2.30.1"
+  }
+}

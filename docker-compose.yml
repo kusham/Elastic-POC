@@ -1,0 +1,80 @@
+version: '3.9'
+
+services:
+  wp:
+    image: wordpress:php8.3-apache
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+    networks:
+      - backend-wpd
+      - frontend-wpd
+  db:
+    image: mysql:5.7
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+    # volumes:
+    #   - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql 
+    ports:
+      - "3307:3306"
+    networks:
+      - backend-wpd
+
+  # elasticsearch:
+  #   image: docker.elastic.co/elasticsearch/elasticsearch:8.13.2
+  #   container_name: elasticsearch
+  #   environment:
+  #     discovery.type: single-node
+  #     xpack.security.enabled: "false"
+  #   ports:
+  #     - 9200:9200
+  #     - 9300:9300
+  #   networks:
+  #     - frontend-wpd
+
+  # kibana:
+  #   image: docker.elastic.co/kibana/kibana:8.13.2
+  #   container_name: kibana
+  #   environment:
+  #     ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+  #   ports:
+  #     - 5601:5601
+  #   networks:
+  #     - frontend-wpd
+      
+  # logstash:
+  #   image: docker.elastic.co/logstash/logstash:8.13.2
+  #   container_name: logstash
+  #   volumes:
+  #     - ./logstash/pipeline:/usr/share/logstash/pipeline
+  #     - ./logstash/jars:/usr/share/logstash/jars
+  #   environment:
+  #     # LS_JAVA_OPTS: "-Xmx1g -Xms1g"
+  #     - xpack.monitoring.enabled=true
+  #     - xpack.monitoring.elasticsearch.hosts=http://elasticsearch:9200
+  #     - CLASSPATH=/usr/share/logstash/jars/mysql-connector-j-9.1.0.jar
+  #     # - LOGSTASH_JDBC_DRIVER=/usr/share/logstash/jars/mysql-connector-java.jar
+  #     - MYSQL_HOST=db
+  #     - MYSQL_PORT=3306
+  #     - MYSQL_DATABASE=wordpress
+  #     - MYSQL_USER=wordpress
+  #     - MYSQL_PASSWORD=wordpress
+  #     - ES_HOST=elasticsearch
+  #     - ES_PORT=9200
+  #   ports:
+  #     - 5044:5044
+  #     - 9600:9600
+  #   networks:
+  #     - backend-wpd
+  #     - frontend-wpd
+
+networks:
+  frontend-wpd:
+  backend-wpd:
